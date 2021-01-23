@@ -37,7 +37,9 @@
 
 
 get.scc <- function (mat1, mat2, resol, h, lbr = 0, ubr = 5000000){
-  
+    # Ad hoc solution
+    mat1[is.na(mat1)] <- 0
+    mat2[is.na(mat2)] <- 0
     if (h == 0){
         smt_R1 = mat1
         smt_R2 = mat2

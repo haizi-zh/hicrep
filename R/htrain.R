@@ -29,7 +29,10 @@
 
 
 htrain <- function(R1, R2, resol, lbr = 0, ubr = 5000000, range = 0:10){
-    
+    # Ad hoc solution
+    R1[is.na(R1)] <- 0
+    R2[is.na(R2)] <- 0
+
     corr = matrix(0, max(range)+1, 2)
     corr[,1] = range
     for (i in range){
