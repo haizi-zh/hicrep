@@ -28,7 +28,7 @@
 #' h_hat <- htrain(HiCR1, HiCR2, 1000000, 0, 5000000, 0:2)
 
 
-htrain <- function(R1, R2, resol, lbr = 0, ubr = 5000000, range = 0:10){
+htrain <- function(R1, R2, resol, lbr = 0, ubr = 5000000, range = 0:10, subsample = TRUE, n = 10){
     # Ad hoc solution
     R1[is.na(R1)] <- 0
     R2[is.na(R2)] <- 0
@@ -44,14 +44,22 @@ htrain <- function(R1, R2, resol, lbr = 0, ubr = 5000000, range = 0:10){
         sub1 <- sub2 <- matrix(0, nrow(R1), ncol(R1))
         
         s_cor = array()
-        for (j in 1:10){
-            d1 = sample(1:nrow(R1), floor(nrow(R1)*ncol(R1)*0.1), 
+        if (!subsample) {
+            n <- 1
+        }
+        for (j in 1:n){
+            if (subsample) {
+                d1 = sample(1:nrow(R1), floor(nrow(R1)*ncol(R1)*0.1), 
                         replace=TRUE)
-            d2 = sample(1:nrow(R2), floor(nrow(R2)*ncol(R2)*0.1), 
+                d2 = sample(1:nrow(R2), floor(nrow(R2)*ncol(R2)*0.1), 
                         replace=TRUE)
-            idx = cbind(d1, d2)
-            sub1[idx] = smt_R1[idx]
-            sub2[idx] = smt_R2[idx]
+                idx = cbind(d1, d2)
+                sub1[idx] = smt_R1[idx]
+                sub2[idx] = smt_R2[idx]
+            } else {
+                sub1 <- smt_R1
+                sub2 <- smt_R2
+            }
             scc.out = get.scc(sub1, sub2, resol, 0, lbr, ubr)
             s_cor[j] = scc.out$scc
         }
