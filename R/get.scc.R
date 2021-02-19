@@ -37,7 +37,11 @@
 
 
 get.scc <- function (mat1, mat2, resol, h, lbr = 0, ubr = 5000000){
-    # Ad hoc solution
+    # Ad hoc solution (mat1 and mat2 may contain NA values, 
+    # which fastMeanFilter can't properly handle).
+    # The best solution would be updating fastMeanFilter itself. However,
+    # this requires dealing with Rcpp stuff. A simpler solution is setting
+    # all the NA values to zero
     mat1[is.na(mat1)] <- 0
     mat2[is.na(mat2)] <- 0
     if (h == 0){
